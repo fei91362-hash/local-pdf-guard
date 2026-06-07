@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Build artifacts
+build/
+dist/
+*.spec~
+*.egg-info/
+
+# Local runtime data
+work/
+outputs/*.zip
+outputs/*.exe
+outputs/*-portable-win64/
+outputs/*-setup-win64/
+*.intermediate.pdf
+
+# Local documents / samples that may contain private data
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+
+# Windows
+Thumbs.db
+Desktop.ini

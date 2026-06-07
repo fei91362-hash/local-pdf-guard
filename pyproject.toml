@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-pdf-guard"
+version = "0.1.0"
+description = "Windows local PDF redaction, watermark, flattening, and permission protection tool."
+requires-python = ">=3.10"
+dependencies = [
+  "PyMuPDF==1.27.2.3",
+  "pikepdf==10.7.3",
+  "Pillow==12.2.0",
+]
+
+[project.scripts]
+local-pdf-guard = "pdf_guard.cli:main"
+local-pdf-guard-gui = "pdf_guard.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
