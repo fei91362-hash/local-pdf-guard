@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -12,6 +13,8 @@ class RedactionBox:
     category: str
     label: str
     confidence: float = 1.0
+    id: str = ""
+    confirmed: bool = True
 
 
 @dataclass(frozen=True)
@@ -47,6 +50,11 @@ class ProcessOptions:
     flatten_dpi: int = 200
     permissions: PermissionOptions = field(default_factory=PermissionOptions)
     clear_bookmarks: bool = True
+    verify_ocr: bool = False
+    sanitize_links: bool = True
+    sanitize_annotations: bool = True
+    sanitize_attachments: bool = True
+    sanitize_javascript: bool = True
 
 
 @dataclass(frozen=True)
@@ -64,6 +72,11 @@ class VerificationResult:
     encrypted: bool
     permissions_checked: bool
     notes: list[str] = field(default_factory=list)
+    risk_level: str = "PASS"
+    ocr_hits: dict[str, list[str]] = field(default_factory=dict)
+    structure_warnings: list[str] = field(default_factory=list)
+    sanitized_items: list[str] = field(default_factory=list)
+    permission_status: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -76,3 +89,24 @@ class ProcessReport:
     encrypted: bool
     verification: VerificationResult
 
+
+@dataclass(frozen=True)
+class BatchItemReport:
+    input_path: Path
+    output_path: Path
+    status: str
+    page_count: int | None = None
+    detected_count: int = 0
+    redacted_count: int = 0
+    risk_level: str | None = None
+    error_message: str | None = None
+    report_json_path: Path | None = None
+
+
+@dataclass(frozen=True)
+class BatchReport:
+    total: int
+    success: int
+    failed: int
+    canceled: int
+    items: list[BatchItemReport] = field(default_factory=list)

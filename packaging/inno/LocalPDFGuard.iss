@@ -1,7 +1,10 @@
 #define MyAppName "Local PDF Guard"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Local PDF Guard"
 #define MyAppExeName "LocalPDFGuard.exe"
+#ifndef Edition
+#define Edition "standard"
+#endif
 
 [Setup]
 AppId={{9D95846C-D7C2-4C9B-982B-LocalPDFGuard}}
@@ -12,7 +15,7 @@ DefaultDirName={autopf}\LocalPDFGuard
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\..\dist
-OutputBaseFilename=LocalPDFGuard-0.1.0-setup-win64
+OutputBaseFilename=LocalPDFGuard-1.1.0-{#Edition}-setup-win64
 Compression=lzma2
 SolidCompression=yes
 ArchitecturesAllowed=x64
@@ -20,7 +23,7 @@ ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 
 [Tasks]
-Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: "附加图标："; Flags: unchecked
+Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional icons"; Flags: unchecked
 
 [Files]
 Source: "..\..\dist\LocalPDFGuard\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -30,4 +33,4 @@ Name: "{group}\Local PDF Guard"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\Local PDF Guard"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "启动 Local PDF Guard"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "Launch Local PDF Guard"; Flags: nowait postinstall skipifsilent

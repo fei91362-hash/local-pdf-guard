@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock.txt
+          pip install -r requirements-dev.lock.txt
+          pip install pyinstaller
+
+      - name: Test
+        run: python -m pytest -q
+
+      - name: Build Standard portable
+        shell: powershell
+        run: .\scripts\build_portable_gui.ps1 -Edition standard
+
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --no-progress -y
+
+      - name: Build Standard installer
+        shell: powershell
+        run: .\scripts\build_installer.ps1 -Edition standard
+
+      - name: Build OCR Full portable
+        shell: powershell
+        run: .\scripts\build_portable_gui_ocrfull.ps1
+
+      - name: Build OCR Full installer
+        shell: powershell
+        run: .\scripts\build_installer_ocrfull.ps1
+
+      - name: SHA256
+        shell: powershell
+        run: |
+          Get-FileHash dist\LocalPDFGuard-1.1.0-*.zip -Algorithm SHA256 | ForEach-Object { "$($_.Hash)  $([System.IO.Path]::GetFileName($_.Path))" } | Out-File dist\SHA256SUMS.txt -Encoding ascii
+          Get-FileHash dist\LocalPDFGuard-1.1.0-*.exe -Algorithm SHA256 | ForEach-Object { "$($_.Hash)  $([System.IO.Path]::GetFileName($_.Path))" } | Out-File dist\SHA256SUMS.txt -Encoding ascii -Append
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/LocalPDFGuard-1.1.0-*.zip
+            dist/LocalPDFGuard-1.1.0-*.exe
+            dist/SHA256SUMS.txt
+          generate_release_notes: true

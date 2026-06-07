@@ -94,6 +94,20 @@ def sanitize_document(doc: fitz.Document, clear_bookmarks: bool = True) -> None:
             doc.set_toc([])
         except Exception:
             pass
+    for page in doc:
+        try:
+            for link in list(page.get_links()):
+                page.delete_link(link)
+        except Exception:
+            pass
+        try:
+            annot = page.first_annot
+            while annot:
+                next_annot = annot.next
+                page.delete_annot(annot)
+                annot = next_annot
+        except Exception:
+            pass
 
 
 def add_watermark(doc: fitz.Document, options: WatermarkOptions) -> None:
