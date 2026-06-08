@@ -7,8 +7,6 @@ from pathlib import Path
 from . import __version__
 from .batch.runner import BatchOptions, BatchRunner
 from .models import PermissionOptions, ProcessOptions, WatermarkOptions
-from .ocr.detectors import detect_ocr_redaction_boxes
-from .ocr.provider import get_default_ocr_provider
 from .pdf_core import detect_redactions
 from .pipeline import process_pdf, process_report_to_dict
 from .rules import selected_rules
@@ -92,6 +90,9 @@ def _process(args: argparse.Namespace) -> int:
     detections, boxes = detect_redactions(args.input, rules, keywords, args.open_password)
     ocr_candidates = []
     if args.enable_ocr:
+        from .ocr.detectors import detect_ocr_redaction_boxes
+        from .ocr.provider import get_default_ocr_provider
+
         provider = get_default_ocr_provider()
         if not provider.is_available():
             raise SystemExit("OCR is not available in this build. Use OCR Full or install PaddleOCR dependencies.")

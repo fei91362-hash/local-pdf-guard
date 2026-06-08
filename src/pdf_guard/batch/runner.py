@@ -6,8 +6,6 @@ from pathlib import Path
 from typing import Callable
 
 from ..models import BatchItemReport, BatchReport, ProcessOptions
-from ..ocr.detectors import detect_ocr_redaction_boxes
-from ..ocr.provider import get_default_ocr_provider
 from ..pdf_core import detect_redactions
 from ..pipeline import process_pdf, process_report_to_dict
 from ..rules import Rule
@@ -56,6 +54,9 @@ class BatchRunner:
                     self.options.process_options.open_password,
                 )
                 if self.options.enable_ocr:
+                    from ..ocr.detectors import detect_ocr_redaction_boxes
+                    from ..ocr.provider import get_default_ocr_provider
+
                     provider = get_default_ocr_provider()
                     if not provider.is_available():
                         raise RuntimeError("OCR is enabled, but no local OCR provider is available.")

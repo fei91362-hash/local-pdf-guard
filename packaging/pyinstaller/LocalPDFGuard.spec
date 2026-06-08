@@ -1,19 +1,41 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 from pathlib import Path
 
 ROOT = Path.cwd()
+EDITION = os.environ.get("LOCAL_PDF_GUARD_EDITION", "standard").lower()
+datas = []
+excludes = []
+if EDITION == "ocrfull":
+    cache_dir = ROOT / "vendor" / "ocr_cache"
+    models_dir = ROOT / "vendor" / "ocr_models"
+    if cache_dir.exists():
+        datas.append((str(cache_dir), "vendor/ocr_cache"))
+    if models_dir.exists():
+        datas.append((str(models_dir), "vendor/ocr_models"))
+else:
+    excludes = [
+        "paddle",
+        "paddleocr",
+        "paddlex",
+        "cv2",
+        "numpy",
+        "pandas",
+        "modelscope",
+        "huggingface_hub",
+    ]
 
 a = Analysis(
     [str(ROOT / "scripts" / "local_pdf_guard_gui_launcher.py")],
     pathex=[str(ROOT / "src"), str(ROOT / "scripts")],
     binaries=[],
-    datas=[],
+    datas=datas,
     hiddenimports=["pymupdf", "pikepdf", "PIL._tkinter_finder"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=excludes,
     noarchive=False,
     optimize=0,
 )
@@ -44,4 +66,3 @@ coll = COLLECT(
     upx_exclude=[],
     name="LocalPDFGuard",
 )
-

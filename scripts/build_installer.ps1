@@ -7,9 +7,7 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
-if (!(Test-Path "dist\LocalPDFGuard\LocalPDFGuard.exe")) {
-  & powershell -ExecutionPolicy Bypass -File scripts\build_portable_gui.ps1 -Edition $Edition
-}
+& powershell -ExecutionPolicy Bypass -File scripts\build_portable_gui.ps1 -Edition $Edition
 
 $Iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 if (!(Test-Path $Iscc)) {

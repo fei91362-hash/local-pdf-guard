@@ -7,6 +7,7 @@ $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
+$env:LOCAL_PDF_GUARD_EDITION = $Edition
 & .\.venv\Scripts\pyinstaller.exe packaging\pyinstaller\LocalPDFGuard.spec --clean --noconfirm
 
 $Zip = "dist\LocalPDFGuard-1.1.0-$Edition-portable-win64.zip"

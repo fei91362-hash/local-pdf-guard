@@ -21,6 +21,10 @@ outputs/*.zip
 outputs/*.exe
 outputs/*-portable-win64/
 outputs/*-setup-win64/
+vendor/ocr_cache/
+vendor/ocr_models/
+vendor/wheelhouse/
+vendor/wheelhouse-ocr/
 *.intermediate.pdf
 
 # Local documents / samples that may contain private data
